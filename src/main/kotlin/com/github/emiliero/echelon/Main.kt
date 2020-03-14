@@ -12,8 +12,8 @@ fun main(args: Array<String>) {
 
     login(client)
 
-    printHelp(client)
-    queueActions(client)
+    printHelp(client) //Help command
+    queueActions(client) //Queue commands
 
     client.login().block()
 }

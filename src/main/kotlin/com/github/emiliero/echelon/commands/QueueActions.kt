@@ -1,9 +1,8 @@
 package com.github.emiliero.echelon.commands
 
-import com.github.emiliero.echelon.commands.list.Commands
-import com.github.emiliero.echelon.commands.list.listActions.addPersonToQueue
-import com.github.emiliero.echelon.commands.list.listActions.printList
-import com.github.emiliero.echelon.commands.list.listActions.removePersonFromQue
+import com.github.emiliero.echelon.queue.ListActionsArray.addPersonToQueue
+import com.github.emiliero.echelon.queue.ListActionsArray.printList
+import com.github.emiliero.echelon.queue.ListActionsArray.removePersonFromQueue
 import discord4j.core.DiscordClient
 import discord4j.core.`object`.entity.Message
 import discord4j.core.`object`.entity.MessageChannel
@@ -60,7 +59,7 @@ private fun leaveQueue(client: DiscordClient) {
             discriminator = m.author.get().discriminator
             m.channel
         }
-        .flatMap<Message> { channel: MessageChannel -> channel.createMessage(removePersonFromQue(username, discriminator))}
+        .flatMap<Message> { channel: MessageChannel -> channel.createMessage(removePersonFromQueue(username, discriminator))}
         .subscribe()
 }
 

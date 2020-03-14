@@ -1,4 +1,4 @@
-package com.github.emiliero.echelon.commands.list
+package com.github.emiliero.echelon.commands
 
 enum class Commands(var commandString: String) {
     Help("!help"){
