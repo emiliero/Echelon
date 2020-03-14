@@ -30,10 +30,10 @@ def apikeyProperties = new Properties()
 apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
 
 buildConfig {
-    appName = 'Dicey'
+    appName = 'Echelon'
     version = '0.1.0'
     clsName = 'BuildConfig'
-    packageName = 'com.github.emiliero.dicey'
+    packageName = 'com.github.emiliero.echelon'
 
     buildConfigField "String", "TOKEN_KEY", apikeyProperties['TOKEN_KEY']
 }
