@@ -59,7 +59,7 @@ object listActions {
         var iterator = l.iterator()
 
         iterator.forEach { student ->
-            builder.append(student.placeInQue.toString() + ": " + student.name)
+            builder.append(student.placeInQue.toString() + ": " + student.name +"\n")
         }
         return builder.toString();
     }
