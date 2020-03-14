@@ -1,7 +1,8 @@
 package com.github.emiliero.echelon
 
+import com.github.emiliero.echelon.commands.printHelp
 import com.github.emiliero.echelon.login.login
-import com.github.emiliero.echelon.commands.Join
+import com.github.emiliero.echelon.commands.queueActions
 import discord4j.core.DiscordClient
 import discord4j.core.DiscordClientBuilder
 
@@ -11,7 +12,8 @@ fun main(args: Array<String>) {
 
     login(client)
 
-    Join(client)
+    printHelp(client)
+    queueActions(client)
 
     client.login().block()
 }
