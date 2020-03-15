@@ -1,12 +1,11 @@
 package com.github.emiliero.echelon.queue
 
+import com.github.emiliero.echelon.model.StudAss
 import com.github.emiliero.echelon.model.Student
-import java.lang.StringBuilder
-import kotlin.collections.ArrayList
 
 object ListActionsArray : IListActions {
     private var studentList : MutableList<Student> = ArrayList<Student>()
-    private var queCount = 1
+    private var queCount : Int = 1
 
 
     override fun addPersonToQueue(username : String, discriminator : String) : String {
@@ -18,7 +17,7 @@ object ListActionsArray : IListActions {
 
         if(!studentInQue){
             val p = Student(username,
-                queCount, discriminator)
+                discriminator, queCount)
             if(studentList.any()){
                 studentList.add(studentList.lastIndex, p)
                 message = "${p.name} has been added to the queue you are at spot ${p.placeInQue}"
@@ -49,8 +48,58 @@ object ListActionsArray : IListActions {
             result = "${student.name} has been removed from their spot in the queue, spot ${student.placeInQue}"
             t.name == username && t.id == discriminator
         }
+        shiftList();
 
         return result
+    }
+
+    override fun printList(): String{
+        var builder : StringBuilder = StringBuilder()
+        var iterator = studentList.iterator()
+        if(studentList.isNotEmpty()) {
+            iterator.forEach { student ->
+                builder.append(student.placeInQue.toString() + ": " + student.name + "\n")
+            }
+        }else{
+            builder.append("list is empty")
+        }
+
+        return builder.toString()
+    }
+
+    override fun shiftList() {
+        val iterator = studentList.iterator()
+        for ((index, value) in iterator.withIndex()) {
+            if(!value.placeInQue.equals(index+1)){
+                value.placeInQue = index+1;
+            }
+
+        }
+        println(studentList);
+    }
+
+
+    override fun clearList(username: String, discriminator: String): String {
+        var message ="";
+        val iterator = listOf(
+        StudAss("larseknu", "8231"),
+        StudAss("Anders", "7082"),
+        StudAss("Zoryi", "9995"),
+        StudAss("Joandreas", "9781"),
+        StudAss("Mette", "7398")
+        )
+        iterator.forEach { studass ->
+            if(studass.name.equals(username) && studass.id.equals(discriminator)){
+                studentList.clear();
+            }
+        }
+        if(studentList.isEmpty()){
+            message="Queue cleared"
+        }else{
+            message="You do not have permissions to do that action"
+        }
+
+        return message;
     }
 
     private fun isStudentInQueue(username: String, discriminator: String) : Boolean{
@@ -58,21 +107,12 @@ object ListActionsArray : IListActions {
         var isInQue = false
 
         iterator.forEach { student ->
-           if(student.name == username && student.id == discriminator){
-               isInQue = true
-           }
+            if(student.name == username && student.id == discriminator){
+                isInQue = true
+            }
         }
         return isInQue
     }
 
-    override fun printList(): String{
-        var builder : StringBuilder = StringBuilder()
-        var iterator = studentList.iterator()
 
-        iterator.forEach { student ->
-            builder.append(student.placeInQue.toString() + ": " + student.name +"\n")
-        }
-
-        return builder.toString()
-    }
 }

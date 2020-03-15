@@ -1,6 +1,7 @@
 package com.github.emiliero.echelon.commands
 
 import com.github.emiliero.echelon.queue.ListActionsArray.addPersonToQueue
+import com.github.emiliero.echelon.queue.ListActionsArray.clearList
 import com.github.emiliero.echelon.queue.ListActionsArray.printList
 import com.github.emiliero.echelon.queue.ListActionsArray.removePersonFromQueue
 import discord4j.core.DiscordClient
@@ -8,11 +9,13 @@ import discord4j.core.`object`.entity.Message
 import discord4j.core.`object`.entity.MessageChannel
 import discord4j.core.`object`.entity.User
 import discord4j.core.event.domain.message.MessageCreateEvent
+import discord4j.core.event.domain.message.MessageEvent
 
 fun queueActions(client: DiscordClient) {
     joinQueue(client)
     leaveQueue(client)
     printQueue(client)
+    clearQueue(client)
 }
 
 private fun joinQueue(client: DiscordClient) {
@@ -74,6 +77,27 @@ private fun printQueue(client: DiscordClient){
         }.flatMap { m : Message -> m.channel }
         .flatMap<Message> { channel: MessageChannel -> channel.createMessage(printList()) }
         .subscribe()
+}
+
+private fun clearQueue(client : DiscordClient){
+    var username =""
+    var discriminator=""
+    client.eventDispatcher.on(MessageCreateEvent::class.java)
+        .map { obj:MessageCreateEvent -> obj.message}
+        .filter{message: Message? ->
+            message!!.author.map { user : User -> !user.isBot}.orElse(false);
+
+        }
+        .filter { message: Message ->
+            message.content.orElse("").contains("!clearList", ignoreCase = true)
+        }.flatMap {m:Message ->
+            username = m.author.get().username
+            discriminator = m.author.get().discriminator
+            m.channel}
+        .flatMap {channel: MessageChannel? ->  channel!!.createMessage(clearList(username, discriminator))}
+        .subscribe()
+
+
 }
 
 

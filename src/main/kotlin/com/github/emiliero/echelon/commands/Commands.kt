@@ -1,6 +1,7 @@
 package com.github.emiliero.echelon.commands
 
 enum class Commands(var commandString: String) {
+
     Help("!help"){
         override fun toString(): String {
             return "Display commands"

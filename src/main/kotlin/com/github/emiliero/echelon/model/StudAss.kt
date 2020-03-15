@@ -1,4 +1,4 @@
 package com.github.emiliero.echelon.model
 
-class StudAss {
+class StudAss(name:String, id:String):Person(name, id){
 }
