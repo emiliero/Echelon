@@ -1,7 +1,11 @@
 package com.github.emiliero.echelon.commands
 
 enum class Commands(var commandString: String) {
-
+    Clear("!clearList"){
+        override fun toString(): String {
+            return "!!For student assistants!! clears the entire list"
+        }
+    },
     Help("!help"){
         override fun toString(): String {
             return "Display commands"

@@ -2,10 +2,11 @@ package com.github.emiliero.echelon.queue
 
 import com.github.emiliero.echelon.model.StudAss
 import com.github.emiliero.echelon.model.Student
+import discord4j.core.`object`.util.Snowflake
 
 object ListActionsArray : IListActions {
     private var studentList : MutableList<Student> = ArrayList<Student>()
-    private var queCount : Int = 1
+    private var queCount : Int = 0
 
 
     override fun addPersonToQueue(username : String, discriminator : String) : String {
@@ -17,11 +18,12 @@ object ListActionsArray : IListActions {
 
         if(!studentInQue){
             val p = Student(username,
-                discriminator, queCount)
+                discriminator, studentList.size+1)
             if(studentList.any()){
-                studentList.add(studentList.lastIndex, p)
+                studentList.add(studentList.lastIndex+1, p)
                 message = "${p.name} has been added to the queue you are at spot ${p.placeInQue}"
                 queCount +=1
+
             } else {
                 studentList.add(p)
                 message ="${p.name} has been added to the queue, you are the first one up at place ${p.placeInQue}"
@@ -35,20 +37,26 @@ object ListActionsArray : IListActions {
     }
 
     override fun removePersonFromQueue(username: String, discriminator: String) : String {
+       val iterator = studentList.iterator()
         if (studentList.none()) {
             return "There's no one in the queue"
         }
 
-        var student : Student = studentList[0]
-        var result = "You are not in the queue, ${student.name}. If you want to join, use `!join`"
+        var result = "You are not in the queue, ${username}. If you want to join, use `!join`"
+        var usernameToBeRemoved =""
+        var placeInQueToBeRemoved=0
+        if(studentList.isNotEmpty()) {
+            for ((index, value) in iterator.withIndex()) {
+                if(value.name.equals(username)&&value.id.equals(discriminator)){
+                    usernameToBeRemoved = value.name
+                    placeInQueToBeRemoved = value.placeInQue
+                    studentList.removeAt(index)
+                }
+            }
 
-        studentList.removeIf { t: Student ->
-            student=t
-            queCount -=1
-            result = "${student.name} has been removed from their spot in the queue, spot ${student.placeInQue}"
-            t.name == username && t.id == discriminator
+            result = "${usernameToBeRemoved} has been removed from their spot in the queue, spot ${placeInQueToBeRemoved}"
+            shiftList();
         }
-        shiftList();
 
         return result
     }
@@ -70,23 +78,24 @@ object ListActionsArray : IListActions {
     override fun shiftList() {
         val iterator = studentList.iterator()
         for ((index, value) in iterator.withIndex()) {
-            if(!value.placeInQue.equals(index+1)){
-                value.placeInQue = index+1;
+            if (!value.placeInQue.equals(index + 1)) {
+                value.placeInQue = index + 1;
             }
 
         }
-        println(studentList);
+
     }
 
 
     override fun clearList(username: String, discriminator: String): String {
-        var message ="";
+        var message =""
+        queCount = 0
         val iterator = listOf(
-        StudAss("larseknu", "8231"),
-        StudAss("Anders", "7082"),
-        StudAss("Zoryi", "9995"),
-        StudAss("Joandreas", "9781"),
-        StudAss("Mette", "7398")
+            StudAss("larseknu", "8231"),
+            StudAss("Anders", "7082"),
+            StudAss("Zoryi", "9995"),
+            StudAss("Joandreas", "9781"),
+            StudAss("Mette", "7398")
         )
         iterator.forEach { studass ->
             if(studass.name.equals(username) && studass.id.equals(discriminator)){
@@ -112,6 +121,20 @@ object ListActionsArray : IListActions {
             }
         }
         return isInQue
+    }
+
+     fun moveNextStudentIntoChannel(studassUsername : String, id : String):String{
+         var id = id.split("{", "}")[1]
+        var message = ""
+         if(studentList.isNotEmpty()) {
+             var user: Student = studentList.get(0);
+             message = "<@${id}> is the next one up with ${studassUsername}"
+             studentList.removeAt(0)
+             queCount-=1
+
+         }
+         shiftList()
+        return message
     }
 
 
