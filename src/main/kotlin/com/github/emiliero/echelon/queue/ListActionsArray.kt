@@ -6,6 +6,14 @@ import com.github.emiliero.echelon.model.Student
 object ListActionsArray : IListActions {
     private var studentList : MutableList<Student> = ArrayList<Student>()
     private var queCount : Int = 0
+    private val listOfStudentAssistants : List<StudAss> = listOf<StudAss>(
+        StudAss("larseknu", "8231"),
+        StudAss("Anders", "7082"),
+        StudAss("Zoryi", "9995"),
+        StudAss("Joandreas", "9781"),
+        StudAss("Mette", "7398"),
+        StudAss("Yearn", "3599")
+    )
 
 
     override fun addPersonToQueue(username : String, discriminator : String, userID : String) : String {
@@ -35,25 +43,26 @@ object ListActionsArray : IListActions {
     }
 
     override fun removePersonFromQueue(username: String, discriminator: String) : String {
-       val iterator = studentList.iterator()
+        val iterator = studentList.iterator()
         if (studentList.none()) {
             return "There's no one in the queue"
         }
 
         var result = "You are not in the queue, ${username}. If you want to join, use `!join`"
-        var usernameToBeRemoved =""
+        var usernameToBeRemoved ="" //TODO endre til ID
         var placeInQueToBeRemoved=0
+
         if(studentList.isNotEmpty()) {
             for ((index, value) in iterator.withIndex()) {
-                if(value.name.equals(username)&&value.id.equals(discriminator)){
+                if(value.name == username && value.discordId == discriminator){
                     usernameToBeRemoved = value.name
                     placeInQueToBeRemoved = value.placeInQue
                     studentList.removeAt(index)
+                    shiftList()
                 }
             }
 
-            result = "${usernameToBeRemoved} has been removed from their spot in the queue, spot ${placeInQueToBeRemoved}"
-            shiftList();
+            result = "$usernameToBeRemoved has been removed from their spot in the queue, spot $placeInQueToBeRemoved"
         }
 
         return result
@@ -86,22 +95,19 @@ object ListActionsArray : IListActions {
     override fun clearList(username: String, discriminator: String): String {
         var message =""
         queCount = 0
-        val iterator = listOf(
-            StudAss("larseknu", "8231"),
-            StudAss("Anders", "7082"),
-            StudAss("Zoryi", "9995"),
-            StudAss("Joandreas", "9781"),
-            StudAss("Mette", "7398")
-        )
-        iterator.forEach { studass ->
-            if(studass.name.equals(username) && studass.id.equals(discriminator)){
+
+        val iterator = listOfStudentAssistants
+
+        iterator.forEach { studentAssistant ->
+            if(studentAssistant.name == username && studentAssistant.discordId == discriminator){
                 studentList.clear();
             }
         }
-        if(studentList.isEmpty()){
-            message="Queue cleared"
-        }else{
-            message="You do not have permissions to do that action"
+
+        message = if (studentList.isEmpty()){
+            "Queue cleared"
+        } else {
+            "You do not have permissions to do that action"
         }
 
         return message;
@@ -112,7 +118,7 @@ object ListActionsArray : IListActions {
         var isInQue = false
 
         iterator.forEach { student ->
-            if(student.name == username && student.id == discriminator){
+            if(student.name == username && student.discordId == discriminator){
                 isInQue = true
             }
         }
@@ -120,10 +126,11 @@ object ListActionsArray : IListActions {
     }
 
     fun moveNextStudentIntoChannel(id : String): String {
-        var studassId = id.split("{", "}")[1]
+        //TODO: Sette restriction på rolle
+        val studassId = id.split("{", "}")[1]
 
         if(studentList.isNotEmpty()) {
-            var user: Student = studentList.get(0);
+            val user: Student = studentList[0];
             studentList.removeAt(0)
             queCount-=1
             shiftList()

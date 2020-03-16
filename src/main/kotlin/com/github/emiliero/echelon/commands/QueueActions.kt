@@ -108,7 +108,10 @@ private fun clearQueue(client : DiscordClient){
 private fun addNextStudentInLineToChannel(client : DiscordClient){
     var message = ""
     var studassUsername = ""
+    var studassDiscriminator = ""
     var id = ""
+    var role =""
+
     client.eventDispatcher.on(MessageCreateEvent::class.java)
         .map{obj:MessageCreateEvent -> obj.message}
         .filter{message:Message? ->
@@ -118,6 +121,7 @@ private fun addNextStudentInLineToChannel(client : DiscordClient){
             message.content.orElse("").equals("!next", ignoreCase = true)
         }.flatMap { m:Message ->
             studassUsername = m.author.get().username
+            studassDiscriminator = m.author.get().discriminator
             message = m.toString()
             id = m.author.get().id.toString()
             m.channel
