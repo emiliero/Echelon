@@ -131,11 +131,9 @@ private fun checkPosition(client : DiscordClient){
 }
 
 private fun addNextStudentInLineToChannel(client : DiscordClient){
-    var message = ""
     var studassUsername = ""
     var studassDiscriminator = ""
     var id = ""
-    var role =""
 
     client.eventDispatcher.on(MessageCreateEvent::class.java)
         .map{obj:MessageCreateEvent -> obj.message}
@@ -147,11 +145,10 @@ private fun addNextStudentInLineToChannel(client : DiscordClient){
         }.flatMap { m:Message ->
             studassUsername = m.author.get().username
             studassDiscriminator = m.author.get().discriminator
-            message = m.toString()
-            id = m.author.get().id.toString()
+            id = m.author.get().id.toString() //Snowflake
             m.channel
         }
-        .flatMap { channel: MessageChannel -> channel.createMessage(moveNextStudentIntoChannel(id))}
+        .flatMap { channel: MessageChannel -> channel.createMessage(moveNextStudentIntoChannel(studassUsername, studassDiscriminator, id))}
         .subscribe()
 }
 

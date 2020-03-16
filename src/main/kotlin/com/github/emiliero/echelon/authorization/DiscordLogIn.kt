@@ -1,4 +1,4 @@
-package com.github.emiliero.echelon.login
+package com.github.emiliero.echelon.authorization
 
 import discord4j.core.DiscordClient
 import discord4j.core.event.domain.lifecycle.ReadyEvent
