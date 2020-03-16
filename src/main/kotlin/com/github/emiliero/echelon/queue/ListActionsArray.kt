@@ -76,7 +76,7 @@ object ListActionsArray : IListActions {
                 builder.append(student.placeInQue.toString() + ": " + student.name + "\n")
             }
         }else{
-            builder.append("list is empty")
+            builder.append("The list is empty")
         }
 
         return builder.toString()
@@ -85,8 +85,8 @@ object ListActionsArray : IListActions {
     override fun shiftList() {
         val iterator = studentList.iterator()
         for ((index, value) in iterator.withIndex()) {
-            if (!value.placeInQue.equals(index + 1)) {
-                value.placeInQue = index + 1;
+            if (value.placeInQue != index + 1) {
+                value.placeInQue = index + 1
             }
         }
     }
@@ -96,13 +96,21 @@ object ListActionsArray : IListActions {
         var message =""
         queCount = 0
 
-        val iterator = listOfStudentAssistants
-
-        iterator.forEach { studentAssistant ->
-            if(studentAssistant.name == username && studentAssistant.discordId == discriminator){
-                studentList.clear();
+        for (enum in StudentAssistant.values()) {
+            if (enum.name == username && discriminator == enum.toString()) {
+                studentList.clear()
+            } else {
+                return "You do not have permission to clear the list"
             }
         }
+        /*val iterator = listOfStudentAssistants //StudentAssistant.values()
+        iterator.forEach { studentAssistant ->
+            if(studentAssistant.name == username && studentAssistant.toString() == discriminator){
+                studentList.clear();
+            } else {
+                return "You do not have permission to clear the list"
+            }
+        }*/
 
         message = if (studentList.isEmpty()){
             "Queue cleared"
@@ -110,7 +118,7 @@ object ListActionsArray : IListActions {
             "You do not have permissions to do that action"
         }
 
-        return message;
+        return message
     }
 
     private fun isStudentInQueue(username: String, discriminator: String) : Boolean {
