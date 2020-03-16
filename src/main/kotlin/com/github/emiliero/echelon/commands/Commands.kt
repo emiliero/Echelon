@@ -1,11 +1,6 @@
 package com.github.emiliero.echelon.commands
 
 enum class Commands(var commandString: String) {
-    Clear("!clearList"){
-        override fun toString(): String {
-            return "!!For student assistants!! clears the entire list"
-        }
-    },
     Help("!help"){
         override fun toString(): String {
             return "Display commands"
@@ -33,12 +28,17 @@ enum class Commands(var commandString: String) {
     },
     Next("!next"){
         override fun toString(): String {
-            return "!! For student assistants !!: Get the next student in queue"
+            return "!!For student assistants!!: Get the next student in queue"
         }
     },
+    Clear("!clear"){
+        override fun toString(): String {
+            return "!!For student assistants!! clears the entire list"
+        }
+    }/*,
     Complete("!complete"){
         override fun toString(): String {
             return "!! For student assistants !!: Finished helping student"
         }
-    }
+    }*/
 }
