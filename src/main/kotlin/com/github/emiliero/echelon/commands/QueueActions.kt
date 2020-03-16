@@ -1,6 +1,7 @@
 package com.github.emiliero.echelon.commands
 
 import com.github.emiliero.echelon.queue.ListActionsArray.addPersonToQueue
+import com.github.emiliero.echelon.queue.ListActionsArray.checkPositionInQueue
 import com.github.emiliero.echelon.queue.ListActionsArray.clearList
 import com.github.emiliero.echelon.queue.ListActionsArray.moveNextStudentIntoChannel
 import com.github.emiliero.echelon.queue.ListActionsArray.printList
@@ -20,6 +21,7 @@ fun queueActions(client: DiscordClient) {
     printQueue(client)
     clearQueue(client)
     addNextStudentInLineToChannel(client)
+    checkPosition(client)
 }
 
 private fun joinQueue(client: DiscordClient) {
@@ -105,6 +107,29 @@ private fun clearQueue(client : DiscordClient){
 
 
 }
+
+private fun checkPosition(client : DiscordClient){
+    var username = ""
+    var discriminator=""
+
+    client.eventDispatcher.on(MessageCreateEvent::class.java)
+        .map { obj:MessageCreateEvent -> obj.message}
+        .filter{message: Message? ->
+            message!!.author.map { user : User -> !user.isBot}.orElse(false);
+
+        }
+        .filter { message: Message ->
+            message.content.orElse("").equals(Commands.Position.commandString, ignoreCase = true)
+        }.flatMap {m:Message ->
+            username = m.author.get().username
+            discriminator = m.author.get().discriminator
+            m.channel}
+        .flatMap {channel: MessageChannel? ->  channel!!.createMessage(checkPositionInQueue(username, discriminator))}
+        .subscribe()
+
+
+}
+
 private fun addNextStudentInLineToChannel(client : DiscordClient){
     var message = ""
     var studassUsername = ""

@@ -146,4 +146,18 @@ object ListActionsArray : IListActions {
         }
         return "<@${studassId}>, there are no students in queue"
     }
+
+    fun checkPositionInQueue(username : String, discriminator: String) : String{
+        var message = "You are not in the queue at the moment. Use !join"
+        var position=0
+
+        val iterator = studentList.iterator()
+        iterator.forEach {student ->
+            if (student.name == username && student.discordId == discriminator) {
+                position = student.placeInQue
+                message = "${username} is at position ${position} in the queue"
+            }
+        }
+        return message
+    }
 }
