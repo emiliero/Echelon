@@ -2,14 +2,13 @@ package com.github.emiliero.echelon.queue
 
 import com.github.emiliero.echelon.model.StudAss
 import com.github.emiliero.echelon.model.Student
-import discord4j.core.`object`.util.Snowflake
 
 object ListActionsArray : IListActions {
     private var studentList : MutableList<Student> = ArrayList<Student>()
     private var queCount : Int = 0
 
 
-    override fun addPersonToQueue(username : String, discriminator : String) : String {
+    override fun addPersonToQueue(username : String, discriminator : String, userID : String) : String {
         val studentInQue = isStudentInQueue(
             username,
             discriminator
@@ -17,8 +16,7 @@ object ListActionsArray : IListActions {
         var message : String = ""
 
         if(!studentInQue){
-            val p = Student(username,
-                discriminator, studentList.size+1)
+            val p = Student(username, discriminator, userID,studentList.size+1)
             if(studentList.any()){
                 studentList.add(studentList.lastIndex+1, p)
                 message = "${p.name} has been added to the queue you are at spot ${p.placeInQue}"
@@ -81,9 +79,7 @@ object ListActionsArray : IListActions {
             if (!value.placeInQue.equals(index + 1)) {
                 value.placeInQue = index + 1;
             }
-
         }
-
     }
 
 
@@ -111,7 +107,7 @@ object ListActionsArray : IListActions {
         return message;
     }
 
-    private fun isStudentInQueue(username: String, discriminator: String) : Boolean{
+    private fun isStudentInQueue(username: String, discriminator: String) : Boolean {
         val iterator = studentList.iterator()
         var isInQue = false
 
@@ -123,19 +119,16 @@ object ListActionsArray : IListActions {
         return isInQue
     }
 
-     fun moveNextStudentIntoChannel(studassUsername : String, id : String):String{
-         var id = id.split("{", "}")[1]
-        var message = ""
-         if(studentList.isNotEmpty()) {
-             var user: Student = studentList.get(0);
-             message = "<@${id}> is the next one up with ${studassUsername}"
-             studentList.removeAt(0)
-             queCount-=1
+    fun moveNextStudentIntoChannel(id : String): String {
+        var studassId = id.split("{", "}")[1]
 
-         }
-         shiftList()
-        return message
+        if(studentList.isNotEmpty()) {
+            var user: Student = studentList.get(0);
+            studentList.removeAt(0)
+            queCount-=1
+            shiftList()
+            return "<@${user.snowflake}> is the next one up with <@${studassId}>"
+        }
+        return "<@${studassId}>, there are no students in queue"
     }
-
-
 }

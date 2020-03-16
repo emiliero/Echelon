@@ -25,7 +25,7 @@ fun queueActions(client: DiscordClient) {
 private fun joinQueue(client: DiscordClient) {
     var username: String = ""
     var discriminator: String = ""
-
+    var id : String = ""
     client.eventDispatcher.on(MessageCreateEvent::class.java)
         .map { obj: MessageCreateEvent -> obj.message }
         .filter { message: Message ->
@@ -36,13 +36,15 @@ private fun joinQueue(client: DiscordClient) {
         }.flatMap { m: Message ->
             username = m.author.get().username
             discriminator = m.author.get().discriminator
+            id = m.author.get().id.toString().split("{", "}")[1]
             m.channel
         }
         .flatMap<Message> { channel: MessageChannel ->
             channel.createMessage(
                 addPersonToQueue(
                     username,
-                    discriminator
+                    discriminator,
+                    id
                 )
             )
         }
@@ -120,7 +122,7 @@ private fun addNextStudentInLineToChannel(client : DiscordClient){
             id = m.author.get().id.toString()
             m.channel
         }
-        .flatMap { channel: MessageChannel -> channel.createMessage(moveNextStudentIntoChannel(studassUsername, id))}
+        .flatMap { channel: MessageChannel -> channel.createMessage(moveNextStudentIntoChannel(id))}
         .subscribe()
 }
 
