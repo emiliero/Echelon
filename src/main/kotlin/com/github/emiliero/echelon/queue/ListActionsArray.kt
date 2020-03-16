@@ -125,7 +125,8 @@ object ListActionsArray : IListActions {
 
      fun moveNextStudentIntoChannel(studassUsername : String, id : String):String{
          var id = id.split("{", "}")[1]
-        var message = ""
+         shiftList()
+         var message = ""
          if(studentList.isNotEmpty()) {
              var user: Student = studentList.get(0);
              message = "<@${id}> is the next one up with ${studassUsername}"
@@ -133,7 +134,22 @@ object ListActionsArray : IListActions {
              queCount-=1
 
          }
-         shiftList()
+        return message
+    }
+
+
+    fun checkPositionInQueue(username:String, id:String) : String {
+        var message = "Could not find your place in the list"
+        var position = 0;
+        val iterator = studentList.iterator()
+        for ((index, value) in iterator.withIndex()) {
+           if(value.name.equals(username) && value.id.equals(id)){
+               position = value.placeInQue
+
+               message = "${username} is at position ${position}"
+           }
+
+        }
         return message
     }
 
