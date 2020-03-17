@@ -29,13 +29,12 @@ object ListActionsArray : IListActions {
     }
 
     override fun removePersonFromQueue(username: String, discriminator: String) : String {
-        val iterator = studentList.iterator()
         if (studentList.none()) {
             return "There's no one in the queue"
         }
 
         var result = "You are not in the queue, ${username}. If you want to join, use `!join`"
-        var snowFlakeToBeRemoved ="" //TODO endre til ID
+        var snowFlakeToBeRemoved = ""
         var placeInQueToBeRemoved=0
 
         if(studentList.isNotEmpty()) {

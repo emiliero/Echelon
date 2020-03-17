@@ -27,13 +27,14 @@ private fun joinQueue(client: DiscordClient) {
     var username: String = ""
     var discriminator: String = ""
     var id : String = ""
+
     client.eventDispatcher.on(MessageCreateEvent::class.java)
         .map { obj: MessageCreateEvent -> obj.message }
         .filter { message: Message ->
             message.author.map { user: User -> !user.isBot }.orElse(false)
         }
         .filter { message: Message ->
-            message.content.orElse("").contains(Commands.Join.commandString, ignoreCase = true)
+            message.content.orElse("").equals(Commands.Join.commandString, ignoreCase = true)
         }.flatMap { m: Message ->
             username = m.author.get().username
             discriminator = m.author.get().discriminator
@@ -62,7 +63,7 @@ private fun leaveQueue(client: DiscordClient) {
             message.author.map { user: User -> !user.isBot }.orElse(false)
         }
         .filter { message: Message ->
-            message.content.orElse("").contains(Commands.Leave.commandString, ignoreCase = true)
+            message.content.orElse("").equals(Commands.Leave.commandString, ignoreCase = true)
         }
         .flatMap { m : Message ->
             username = m.author.get().username
@@ -80,7 +81,7 @@ private fun printQueue(client: DiscordClient){
             message.author.map { user: User -> !user.isBot}.orElse(false)
         }
         .filter { message: Message ->
-            message.content.orElse("").contains(Commands.PrintQueue.commandString, ignoreCase = true)
+            message.content.orElse("").equals(Commands.PrintQueue.commandString, ignoreCase = true)
         }.flatMap { m : Message -> m.channel }
         .flatMap<Message> { channel: MessageChannel -> channel.createMessage(printList()) }
         .subscribe()
@@ -89,6 +90,7 @@ private fun printQueue(client: DiscordClient){
 private fun clearQueue(client : DiscordClient){
     var username =""
     var discriminator=""
+
     client.eventDispatcher.on(MessageCreateEvent::class.java)
         .map { obj:MessageCreateEvent -> obj.message}
         .filter{message: Message? ->
@@ -103,8 +105,6 @@ private fun clearQueue(client : DiscordClient){
             m.channel}
         .flatMap {channel: MessageChannel? ->  channel!!.createMessage(clearList(username, discriminator))}
         .subscribe()
-
-
 }
 
 private fun checkPosition(client : DiscordClient){
@@ -125,8 +125,6 @@ private fun checkPosition(client : DiscordClient){
             m.channel}
         .flatMap {channel: MessageChannel? ->  channel!!.createMessage(checkPositionInQueue(username, discriminator))}
         .subscribe()
-
-
 }
 
 private fun addNextStudentInLineToChannel(client : DiscordClient){
