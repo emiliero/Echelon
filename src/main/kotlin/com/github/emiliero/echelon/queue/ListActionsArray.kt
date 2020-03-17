@@ -39,33 +39,28 @@ object ListActionsArray : IListActions {
         var placeInQueToBeRemoved=0
 
         if(studentList.isNotEmpty()) {
-            for ((index, value) in iterator.withIndex()) {
-                if(value.name == username && value.discordId == discriminator){
-                    usernameToBeRemoved = value.name
-                    placeInQueToBeRemoved = value.placeInQue
-                    studentList.removeAt(index)
-                    shiftList()
+            run {
+                val iterator: MutableIterator<Student> = studentList.iterator()
+                while (iterator.hasNext()) {
+                    val value = iterator.next()
+                    if (value.name == username && value.discordId == discriminator) {
+                        placeInQueToBeRemoved = value.placeInQue
+                        usernameToBeRemoved = value.name
+                        iterator.remove()
+                    }
                 }
             }
-
-            result = "$usernameToBeRemoved has been removed from their spot in the queue, spot $placeInQueToBeRemoved"
+            if(usernameToBeRemoved.isNotEmpty()){
+                shiftList()
+                result = "$usernameToBeRemoved has been removed from their spot in the queue, spot $placeInQueToBeRemoved"
+            }
         }
 
         return result
     }
 
-    private fun shiftList() {
-        val iterator = studentList.iterator()
-
-        for ((index, value) in iterator.withIndex()) {
-            if (value.placeInQue != index + 1) {
-                value.placeInQue = index + 1
-            }
-        }
-    }
-
-
     override fun clearList(username: String, discriminator: String): String {
+        //TODO: Hvis lista alt er tom, ikke clear
         if (isUserAuthorizedForStudentAssistantCommands(username, discriminator)) {
             studentList.clear()
         }
@@ -112,6 +107,16 @@ object ListActionsArray : IListActions {
             }
         }
         return message
+    }
+
+    private fun shiftList() {
+        val iterator = studentList.iterator()
+
+        for ((index, value) in iterator.withIndex()) {
+            if (value.placeInQue != index + 1) {
+                value.placeInQue = index + 1
+            }
+        }
     }
 
     override fun printList(): String{
