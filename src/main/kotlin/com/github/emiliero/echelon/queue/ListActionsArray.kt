@@ -24,7 +24,7 @@ object ListActionsArray : IListActions {
                 "<@${p.snowflake}>"+ " has been added to the queue, you are the first one up at place ${p.placeInQue}"
             }
         } else {
-            "<@${p.snowflake}>"+" is already in the queue, you can't join twice"
+            "<@${p.snowflake}>"+" is already in the queue, you can't join twice <:pepega:687979040019054803>"
         }
     }
 
@@ -92,7 +92,7 @@ object ListActionsArray : IListActions {
             val user: Student = studentList[0];
             studentList.removeAt(0)
             shiftList()
-            return "<@${user.snowflake}> is the next one up with <@${studentAssistantId}>"
+            return "<@${user.snowflake}> is the next one up with <@${studentAssistantId}> <:pepeHack:687975058215403552>"
         }
         return "<@${studentAssistantId}>, there are no students in queue"
     }

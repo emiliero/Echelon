@@ -28,12 +28,12 @@ enum class Commands(var commandString: String) {
     },
     Next("!next"){
         override fun toString(): String {
-            return "!!For student assistants!!: Get the next student in queue"
+            return "!!FOR STUDENT ASSISTANTS!!: Get the next student in queue"
         }
     },
     Clear("!clear"){
         override fun toString(): String {
-            return "!!For student assistants!! clears the entire list"
+            return "!!FOR STUDENT ASSISTANTS!!: Clear the entire list"
         }
     }/*,
     Complete("!complete"){
