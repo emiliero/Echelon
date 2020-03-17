@@ -12,19 +12,19 @@ object ListActionsArray : IListActions {
             username,
             discriminator
         )
+        val p = Student(username, discriminator, userID, studentList.size+1)
 
         return if(!studentInQue){
-            val p = Student(username, discriminator, userID, studentList.size+1)
             if(studentList.any()){
                 studentList.add(studentList.lastIndex+1, p)
-                "${p.name} has been added to the queue you are at spot ${p.placeInQue}"
+                "<@${p.snowflake}>"+" has been added to the queue you are at spot ${p.placeInQue}"
 
             } else {
                 studentList.add(p)
-                "${p.name} has been added to the queue, you are the first one up at place ${p.placeInQue}"
+                "<@${p.snowflake}>"+ " has been added to the queue, you are the first one up at place ${p.placeInQue}"
             }
         } else {
-            "$username is already in the queue, you can't join twice <:birthdayPepega:688469221499207744>"
+            "<@${p.snowflake}>"+" is already in the queue, you can't join twice"
         }
     }
 
@@ -35,7 +35,7 @@ object ListActionsArray : IListActions {
         }
 
         var result = "You are not in the queue, ${username}. If you want to join, use `!join`"
-        var usernameToBeRemoved ="" //TODO endre til ID
+        var snowFlakeToBeRemoved ="" //TODO endre til ID
         var placeInQueToBeRemoved=0
 
         if(studentList.isNotEmpty()) {
@@ -45,14 +45,15 @@ object ListActionsArray : IListActions {
                     val value = iterator.next()
                     if (value.name == username && value.discordId == discriminator) {
                         placeInQueToBeRemoved = value.placeInQue
-                        usernameToBeRemoved = value.name
+                        snowFlakeToBeRemoved= value.snowflake
                         iterator.remove()
                     }
                 }
             }
-            if(usernameToBeRemoved.isNotEmpty()){
+            if(snowFlakeToBeRemoved.isNotEmpty()){
                 shiftList()
-                result = "$usernameToBeRemoved has been removed from their spot in the queue, spot $placeInQueToBeRemoved"
+                result = "<@$snowFlakeToBeRemoved>"+
+                        " has been removed from their spot in the queue, spot $placeInQueToBeRemoved"
             }
         }
 
@@ -103,7 +104,8 @@ object ListActionsArray : IListActions {
         iterator.forEach {student ->
             if (student.name == username && student.discordId == discriminator) {
                 val position = student.placeInQue
-                message = "$username is at position $position in the queue"
+                message = "<@${student.snowflake}>" +
+                        " is at position $position in the queue"
             }
         }
         return message
@@ -123,6 +125,7 @@ object ListActionsArray : IListActions {
         val builder : StringBuilder = StringBuilder()
         val iterator = studentList.iterator()
 
+        // TODO: @ person som kaller på metoden (bruker kommandoen)
         if(studentList.isNotEmpty()) {
             iterator.forEach { student ->
                 builder.append(student.placeInQue.toString() + ": " + student.name + "\n")
