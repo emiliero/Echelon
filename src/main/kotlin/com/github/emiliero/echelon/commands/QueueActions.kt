@@ -10,12 +10,11 @@ import discord4j.core.DiscordClient
 import discord4j.core.`object`.entity.Message
 import discord4j.core.`object`.entity.MessageChannel
 import discord4j.core.`object`.entity.User
-import discord4j.core.`object`.entity.VoiceChannel
-import discord4j.core.`object`.util.Snowflake
 import discord4j.core.event.domain.message.MessageCreateEvent
-import discord4j.core.event.domain.message.MessageEvent
 
 fun queueActions(client: DiscordClient) {
+    //TODO: Make commands only available in "kø" text channel
+
     joinQueue(client)
     leaveQueue(client)
     printQueue(client)
@@ -97,7 +96,7 @@ private fun clearQueue(client : DiscordClient){
 
         }
         .filter { message: Message ->
-            message.content.orElse("").equals("!clearList", ignoreCase = true)
+            message.content.orElse("").equals(Commands.Clear.commandString, ignoreCase = true)
         }.flatMap {m:Message ->
             username = m.author.get().username
             discriminator = m.author.get().discriminator
@@ -141,7 +140,7 @@ private fun addNextStudentInLineToChannel(client : DiscordClient){
             message!!.author.map { user: User -> !user.isBot }.orElse(false)
         }
         .filter{message: Message ->
-            message.content.orElse("").equals("!next", ignoreCase = true)
+            message.content.orElse("").equals(Commands.Next.commandString, ignoreCase = true)
         }.flatMap { m:Message ->
             studassUsername = m.author.get().username
             studassDiscriminator = m.author.get().discriminator

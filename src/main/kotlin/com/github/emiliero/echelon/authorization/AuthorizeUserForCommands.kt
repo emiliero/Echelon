@@ -4,7 +4,7 @@ import com.github.emiliero.echelon.queue.StudentAssistant
 
 fun isUserAuthorizedForStudentAssistantCommands(username: String, discriminator: String): Boolean {
     for (enum in StudentAssistant.values()) {
-        if (enum.name == username && enum.toString() == discriminator) {
+        if (enum.studentAssistantUsername == username && enum.toString() == discriminator) {
             return true
         }
     }

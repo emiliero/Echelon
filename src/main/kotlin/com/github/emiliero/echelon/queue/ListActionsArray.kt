@@ -82,7 +82,7 @@ object ListActionsArray : IListActions {
         var isInQue = false
 
         iterator.forEach { student ->
-            if(student.name == username && student.discordId == discriminator){
+            if(student.name == username && student.discordId == discriminator) {
                 isInQue = true
             }
         }

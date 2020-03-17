@@ -1,6 +1,6 @@
 package com.github.emiliero.echelon.queue
 
-enum class StudentAssistant(studentAssistantUsername: String) {
+enum class StudentAssistant(var studentAssistantUsername: String) {
     LarsEmil("larseknu"){
         override fun toString(): String {
             return "8231"
