@@ -46,6 +46,17 @@ if (rootProject.file("apikey.properties").exists()) {
 
         buildConfigField "String", "TOKEN_KEY", apikeyProperties['TOKEN_KEY']
     }
+} else {
+    def apikeyProperty = System.getenv("apikeyproperty") as Integer ?: 1
+
+    buildConfig {
+        appName = 'Echelon'
+        version = '0.1.0'
+        clsName = 'BuildConfig'
+        packageName = 'com.github.emiliero.echelon'
+
+        buildConfigField "String", "TOKEN_KEY", apikeyProperty
+    }
 }
 
 jar {
