@@ -33,17 +33,19 @@ task wrapper(type: Wrapper) {
 
 
 // Discord token
-def apikeyPropertiesFile = rootProject.file("apikey.properties")
-def apikeyProperties = new Properties()
-apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
+if (rootProject.file("apikey.properties").exists()) {
+    def apikeyPropertiesFile = rootProject.file("apikey.properties")
+    def apikeyProperties = new Properties()
+    apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
 
-buildConfig {
-    appName = 'Echelon'
-    version = '0.1.0'
-    clsName = 'BuildConfig'
-    packageName = 'com.github.emiliero.echelon'
+    buildConfig {
+        appName = 'Echelon'
+        version = '0.1.0'
+        clsName = 'BuildConfig'
+        packageName = 'com.github.emiliero.echelon'
 
-    buildConfigField "String", "TOKEN_KEY", apikeyProperties['TOKEN_KEY']
+        buildConfigField "String", "TOKEN_KEY", apikeyProperties['TOKEN_KEY']
+    }
 }
 
 jar {
