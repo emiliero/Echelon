@@ -26,7 +26,7 @@ compileTestKotlin {
 }
 
 // Azure pipeline
-task wrapper(type: Wrapper) {
+wrapper {
     gradleVersion = '5.2.1'
     distributionUrl = "https://services.gradle.org/distributions/gradle-${gradleVersion}-all.zip"
 }
