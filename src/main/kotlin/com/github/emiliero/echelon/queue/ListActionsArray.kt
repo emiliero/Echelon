@@ -8,6 +8,12 @@ object ListActionsArray : IListActions {
     private var studentList : MutableList<Student> = ArrayList<Student>()
 
     override fun addPersonToQueue(username : String, discriminator : String, userID : String) : String {
+        if (outsideOfQueueTime()) {
+            return "<@${userID}> you can't join the queue at this time. " +
+                    "Join in some of the following periods: \n" +
+                    DateTimeCheck.printQueuePeriods()
+        }
+
         val studentInQue = isStudentInQueue(
             username,
             discriminator
@@ -26,6 +32,10 @@ object ListActionsArray : IListActions {
         } else {
             "<@${p.snowflake}>"+" is already in the queue, you can't join twice <:pepega:687979040019054803>"
         }
+    }
+
+    private fun outsideOfQueueTime(): Boolean {
+        return !DateTimeCheck.validateIfQueueTimeIsValid()
     }
 
     override fun removePersonFromQueue(username: String, discriminator: String) : String {

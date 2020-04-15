@@ -7,6 +7,13 @@ apply plugin: 'idea'
 group 'com.github.emiliero'
 version '1.0-SNAPSHOT'
 
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.github.emiliero.echelon.MainKt'
+    }
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
+
 sourceCompatibility = 11
 
 repositories {
@@ -25,24 +32,22 @@ compileTestKotlin {
     kotlinOptions.jvmTarget = "11"
 }
 
-def apikeyPropertiesFile = rootProject.file("apikey.properties")
-def apikeyProperties = new Properties()
-apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
+// Discord token
+if (rootProject.file("apikey.properties").exists()) {
+    def apikeyPropertiesFile = rootProject.file("apikey.properties")
+    def apikeyProperties = new Properties()
+    apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
 
-buildConfig {
-    appName = 'Echelon'
-    version = '0.1.0'
-    clsName = 'BuildConfig'
-    packageName = 'com.github.emiliero.echelon'
+    buildConfig {
+        appName = 'Echelon'
+        version = '0.1.0'
+        clsName = 'BuildConfig'
+        packageName = 'com.github.emiliero.echelon'
 
-    buildConfigField "String", "TOKEN_KEY", apikeyProperties['TOKEN_KEY']
-}
-
-jar {
-    manifest {
-        attributes 'Main-Class': 'Main'
+        buildConfigField "String", "TOKEN_KEY", apikeyProperties['TOKEN_KEY']
     }
 }
+
 sourceSets {
     main.java.srcDirs += 'src/main/kotlin'
 }
