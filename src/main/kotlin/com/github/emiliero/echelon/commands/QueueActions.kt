@@ -24,9 +24,9 @@ fun queueActions(client: DiscordClient) {
 }
 
 private fun joinQueue(client: DiscordClient) {
-    var username: String = ""
-    var discriminator: String = ""
-    var id : String = ""
+    var username = ""
+    var discriminator = ""
+    var id = ""
 
     client.eventDispatcher.on(MessageCreateEvent::class.java)
         .map { obj: MessageCreateEvent -> obj.message }
@@ -54,8 +54,8 @@ private fun joinQueue(client: DiscordClient) {
 }
 
 private fun leaveQueue(client: DiscordClient) {
-    var username : String = ""
-    var discriminator : String = ""
+    var username = ""
+    var discriminator = ""
 
     client.eventDispatcher.on(MessageCreateEvent::class.java)
         .map { obj: MessageCreateEvent -> obj.message }
@@ -94,7 +94,7 @@ private fun clearQueue(client : DiscordClient){
     client.eventDispatcher.on(MessageCreateEvent::class.java)
         .map { obj:MessageCreateEvent -> obj.message}
         .filter{message: Message? ->
-            message!!.author.map { user : User -> !user.isBot}.orElse(false);
+            message!!.author.map { user : User -> !user.isBot}.orElse(false)
 
         }
         .filter { message: Message ->
@@ -110,20 +110,22 @@ private fun clearQueue(client : DiscordClient){
 private fun checkPosition(client : DiscordClient){
     var username = ""
     var discriminator=""
+    var snowflake = ""
 
     client.eventDispatcher.on(MessageCreateEvent::class.java)
         .map { obj:MessageCreateEvent -> obj.message}
         .filter{message: Message? ->
-            message!!.author.map { user : User -> !user.isBot}.orElse(false);
-
+            message!!.author.map { user : User -> !user.isBot}.orElse(false)
         }
         .filter { message: Message ->
             message.content.orElse("").equals(Commands.Position.commandString, ignoreCase = true)
         }.flatMap {m:Message ->
             username = m.author.get().username
             discriminator = m.author.get().discriminator
-            m.channel}
-        .flatMap {channel: MessageChannel? ->  channel!!.createMessage(checkPositionInQueue(username, discriminator))}
+            snowflake = m.author.get().id.toString() //Snowflake
+            m.channel
+        }
+        .flatMap {channel: MessageChannel? ->  channel!!.createMessage(checkPositionInQueue(username, discriminator, snowflake))}
         .subscribe()
 }
 

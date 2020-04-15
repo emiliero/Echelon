@@ -10,6 +10,7 @@ import discord4j.core.DiscordClientBuilder
 fun main(args: Array<String>) {
     val client: DiscordClient = DiscordClientBuilder(BuildConfig.TOKEN_KEY).build()
 
+    //TODO: Printe ut hvor mange hver student har hjulpet etter endt øvingstime?
     login(client)
     printHelp(client) //Help command
     queueActions(client) //Queue commands

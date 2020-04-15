@@ -2,10 +2,10 @@ package com.github.emiliero.echelon.queue
 
 import com.github.emiliero.echelon.authorization.isUserAuthorizedForStudentAssistantCommands
 import com.github.emiliero.echelon.model.Student
+import discord4j.core.`object`.util.Snowflake
 
 object ListActionsArray : IListActions {
     private var studentList : MutableList<Student> = ArrayList<Student>()
-
 
     override fun addPersonToQueue(username : String, discriminator : String, userID : String) : String {
         val studentInQue = isStudentInQueue(
@@ -61,7 +61,7 @@ object ListActionsArray : IListActions {
 
     override fun clearList(username: String, discriminator: String): String {
         //TODO: Hvis lista alt er tom, ikke clear
-        if (isUserAuthorizedForStudentAssistantCommands(username, discriminator)) {
+        if (isUserAuthorizedForStudentAssistantCommands(username, discriminator) && studentList.isNotEmpty()) {
             studentList.clear()
         }
 
@@ -87,17 +87,17 @@ object ListActionsArray : IListActions {
     fun moveNextStudentIntoChannel(username: String, discriminator: String, id : String): String {
         val studentAssistantId = id.split("{", "}")[1]
 
-        if(studentList.isNotEmpty() && isUserAuthorizedForStudentAssistantCommands(username, discriminator)) {
-            val user: Student = studentList[0];
-            studentList.removeAt(0)
+        if(!studentList.isNullOrEmpty() && isUserAuthorizedForStudentAssistantCommands(username, discriminator)) {
+            val user: Student = studentList.removeAt(0)
             shiftList()
             return "<@${user.snowflake}> is the next one up with <@${studentAssistantId}> <:pepeHack:687975058215403552>"
         }
         return "<@${studentAssistantId}>, there are no students in queue"
     }
 
-    fun checkPositionInQueue(username : String, discriminator: String) : String{
-        var message = "You are not in the queue at the moment. Use !join"
+    fun checkPositionInQueue(username: String, discriminator: String, snowflake: String) : String {
+        val authorSnowflake: String = snowflake.split("{", "}")[1]
+        var message = "<@${authorSnowflake}> is not in the queue at the moment. Use `!join`"
         val iterator = studentList.iterator()
 
         iterator.forEach {student ->
