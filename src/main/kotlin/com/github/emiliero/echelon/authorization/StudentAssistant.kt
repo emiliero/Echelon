@@ -1,4 +1,4 @@
-package com.github.emiliero.echelon.queue
+package com.github.emiliero.echelon.authorization
 
 enum class StudentAssistant(var studentAssistantUsername: String) {
     LarsEmil("larseknu"){

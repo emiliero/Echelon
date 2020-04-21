@@ -6,6 +6,7 @@ import com.github.emiliero.echelon.queue.ListActionsArray.clearList
 import com.github.emiliero.echelon.queue.ListActionsArray.moveNextStudentIntoChannel
 import com.github.emiliero.echelon.queue.ListActionsArray.printList
 import com.github.emiliero.echelon.queue.ListActionsArray.removePersonFromQueue
+import com.github.emiliero.echelon.queue.ListActionsArray.reportSummary
 import discord4j.core.DiscordClient
 import discord4j.core.`object`.entity.Message
 import discord4j.core.`object`.entity.MessageChannel
@@ -22,6 +23,7 @@ fun queueActions(client: DiscordClient) {
     clearQueue(client)
     addNextStudentInLineToChannel(client)
     checkPosition(client)
+    printReport(client)
 }
 
 private fun joinQueue(client: DiscordClient) {
@@ -152,6 +154,25 @@ private fun addNextStudentInLineToChannel(client : DiscordClient){
         .subscribe()
 }
 
+private fun printReport(client : DiscordClient) {
+    var studassUsername = ""
+    var studassDiscriminator=""
 
+    client.eventDispatcher.on(MessageCreateEvent::class.java)
+        .map{obj:MessageCreateEvent -> obj.message}
+        .filter{message:Message? ->
+            message!!.author.map { user: User -> !user.isBot }.orElse(false)
+        }
+        .filter{message: Message ->
+            message.content.orElse("").equals(Commands.Report.commandString, ignoreCase = true)
+        }.flatMap { m:Message ->
+
+            studassUsername = m.author.get().username
+            studassDiscriminator = m.author.get().discriminator
+            m.channel
+        }
+        .flatMap { channel: MessageChannel -> channel.createMessage(reportSummary(channel.id.toString(),studassUsername, studassDiscriminator))}
+        .subscribe()
+}
 
 

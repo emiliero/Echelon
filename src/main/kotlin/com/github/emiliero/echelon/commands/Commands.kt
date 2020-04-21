@@ -35,6 +35,11 @@ enum class Commands(var commandString: String) {
         override fun toString(): String {
             return "!!FOR STUDENT ASSISTANTS!!: Clear the entire list"
         }
+    },
+    Report("!report"){
+        override fun toString(): String {
+            return "!!FOR STUDENT ASSISTANTS!!: Print report for the day"
+        }
     }/*,
     Complete("!complete"){
         override fun toString(): String {

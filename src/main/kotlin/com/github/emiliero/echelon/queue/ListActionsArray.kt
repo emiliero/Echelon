@@ -1,11 +1,15 @@
 package com.github.emiliero.echelon.queue
 
+import com.github.emiliero.echelon.authorization.isUserAuthorizedForChannelCommand
 import com.github.emiliero.echelon.authorization.isUserAuthorizedForStudentAssistantCommands
+import com.github.emiliero.echelon.model.Report
 import com.github.emiliero.echelon.model.Student
 import discord4j.core.`object`.util.Snowflake
+import java.time.LocalDateTime
 
 object ListActionsArray : IListActions {
     private var studentList : MutableList<Student> = ArrayList<Student>()
+    private var report = Report()
 
     override fun addPersonToQueue(username : String, discriminator : String, userID : String) : String {
         if (outsideOfQueueTime()) {
@@ -23,10 +27,11 @@ object ListActionsArray : IListActions {
         return if(!studentInQue){
             if(studentList.any()){
                 studentList.add(studentList.lastIndex+1, p)
+                report.countAdditionalStudentInQueue()
                 "<@${p.snowflake}>"+" has been added to the queue you are at spot ${p.placeInQue}"
-
             } else {
                 studentList.add(p)
+                report.countAdditionalStudentInQueue()
                 "<@${p.snowflake}>"+ " has been added to the queue, you are the first one up at place ${p.placeInQue}"
             }
         } else {
@@ -95,10 +100,11 @@ object ListActionsArray : IListActions {
     }
 
     fun moveNextStudentIntoChannel(username: String, discriminator: String, id : String): String {
-        val studentAssistantId = id.split("{", "}")[1]
+        val studentAssistantId = createValidSnowFlake(id)
 
         if(!studentList.isNullOrEmpty() && isUserAuthorizedForStudentAssistantCommands(username, discriminator)) {
             val user: Student = studentList.removeAt(0)
+            report.addHelpToReport(studentAssistantId, user)
             shiftList()
             return "<@${user.snowflake}> is the next one up with <@${studentAssistantId}> <:pepeHack:687975058215403552>"
         }
@@ -145,4 +151,18 @@ object ListActionsArray : IListActions {
 
         return builder.toString()
     }
+
+    fun reportSummary(channelId : String,username : String, discriminator : String): String {
+        var channelSnowFlake = createValidSnowFlake((channelId))
+        return if(isUserAuthorizedForStudentAssistantCommands(username, discriminator) && isUserAuthorizedForChannelCommand(channelSnowFlake)) {
+            report.toString()
+        }else{
+            "this command is restricted to another channel or another usergroup"
+        }
+    }
+
+    fun createValidSnowFlake(id : String) : String {
+        return id.split("{", "}")[1];
+    }
+
 }
