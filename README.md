@@ -41,9 +41,10 @@ __Student assistants__
 
 `!clear` - Clear the entire list
 
+`!report` - Prints a report of rehearsal data for det given day
+
 ## Future features
 
 Features intended to be implemented:
 
-* A command which prints a report of how many students each student assistant helped on the given day
 * Calculation of average queue- and help-time
