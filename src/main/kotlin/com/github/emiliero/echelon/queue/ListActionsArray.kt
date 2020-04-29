@@ -4,43 +4,34 @@ import com.github.emiliero.echelon.authorization.isUserAuthorizedForChannelComma
 import com.github.emiliero.echelon.authorization.isUserAuthorizedForStudentAssistantCommands
 import com.github.emiliero.echelon.model.Report
 import com.github.emiliero.echelon.model.Student
-import discord4j.core.`object`.util.Snowflake
-import java.time.LocalDateTime
 
 object ListActionsArray : IListActions {
     private var studentList : MutableList<Student> = ArrayList<Student>()
     private var report = Report()
 
     override fun addPersonToQueue(username : String, discriminator : String, userID : String) : String {
-        if (outsideOfQueueTime()) {
+        if (!DateTimeCheck.checkIfDateIsOutsideOfQueueTime()) {
             return "<@${userID}> you can't join the queue at this time. " +
                     "Join in some of the following periods: \n" +
                     DateTimeCheck.printQueuePeriods()
         }
 
-        val studentInQue = isStudentInQueue(
-            username,
-            discriminator
-        )
+        val studentInQue = isStudentInQueue(username, discriminator)
         val p = Student(username, discriminator, userID, studentList.size+1)
 
         return if(!studentInQue){
             if(studentList.any()){
                 studentList.add(studentList.lastIndex+1, p)
-                report.countAdditionalStudentInQueue()
+                report.addQueuedStudentToReport()
                 "<@${p.snowflake}>"+" has been added to the queue you are at spot ${p.placeInQue}"
             } else {
                 studentList.add(p)
-                report.countAdditionalStudentInQueue()
+                report.addQueuedStudentToReport()
                 "<@${p.snowflake}>"+ " has been added to the queue, you are the first one up at place ${p.placeInQue}"
             }
         } else {
             "<@${p.snowflake}>"+" is already in the queue, you can't join twice <:pepega:687979040019054803>"
         }
-    }
-
-    private fun outsideOfQueueTime(): Boolean {
-        return !DateTimeCheck.validateIfQueueTimeIsValid()
     }
 
     override fun removePersonFromQueue(username: String, discriminator: String) : String {
@@ -75,16 +66,20 @@ object ListActionsArray : IListActions {
     }
 
     override fun clearList(username: String, discriminator: String): String {
+        var result = ""
         //TODO: Hvis lista alt er tom, ikke clear
-        if (isUserAuthorizedForStudentAssistantCommands(username, discriminator) && studentList.isNotEmpty()) {
-            studentList.clear()
+        result = if (isUserAuthorizedForStudentAssistantCommands(username, discriminator)) {
+            if (studentList.isNotEmpty()) {
+                studentList.clear()
+                "Queue is cleared"
+            } else {
+                "The queue was already empty"
+            }
+        } else {
+            "You are not authorized for this command"
         }
 
-        return if (studentList.isEmpty()){
-            "Queue cleared"
-        } else {
-            "You do not have permission to clear the list"
-        }
+        return result
     }
 
     private fun isStudentInQueue(username: String, discriminator: String) : Boolean {
@@ -153,16 +148,18 @@ object ListActionsArray : IListActions {
     }
 
     fun reportSummary(channelId : String,username : String, discriminator : String): String {
-        var channelSnowFlake = createValidSnowFlake((channelId))
-        return if(isUserAuthorizedForStudentAssistantCommands(username, discriminator) && isUserAuthorizedForChannelCommand(channelSnowFlake)) {
+        val channelSnowFlake = createValidSnowFlake((channelId))
+
+        return if(isUserAuthorizedForStudentAssistantCommands(username, discriminator)
+            && isUserAuthorizedForChannelCommand(channelSnowFlake)) {
             report.toString()
-        }else{
-            "this command is restricted to another channel or another usergroup"
+        } else {
+            "this command is restricted to another channel or user group"
         }
     }
 
     fun createValidSnowFlake(id : String) : String {
-        return id.split("{", "}")[1];
+        return id.split("{", "}")[1]
     }
 
 }

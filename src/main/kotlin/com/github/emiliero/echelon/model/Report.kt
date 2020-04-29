@@ -1,6 +1,6 @@
 package com.github.emiliero.echelon.model
 
-import java.time.LocalDate
+import com.github.emiliero.echelon.queue.DateTimeCheck
 import java.time.LocalDateTime
 
 class Report {
@@ -8,7 +8,8 @@ class Report {
     private val help = HashMap<String, ArrayList<Student>>()
     private var reportDateTime = LocalDateTime.now()
 
-    fun countAdditionalStudentInQueue() {
+    fun addQueuedStudentToReport() {
+        clearReportIfDateIsNotToday()
         if (queuers == 0) {
             queuers = 1
         } else {
@@ -17,8 +18,6 @@ class Report {
     }
 
     fun addHelpToReport(studAssId: String, studentGettingHelp: Student) {
-        clearReportIfDateIsNotToday()
-
         val students: ArrayList<Student>? = help[studAssId]
 
         if (students == null) {
@@ -32,11 +31,10 @@ class Report {
     }
 
     private fun clearReportIfDateIsNotToday() {
-        val reportDate = reportDateTime.toLocalDate()
-
-        if (reportDate != LocalDate.now()) {
+        if (!DateTimeCheck.checkIfDateIsOutsideOfQueueTime()) {
             reportDateTime = LocalDateTime.now()
             help.clear()
+            queuers = 0
         }
     }
 

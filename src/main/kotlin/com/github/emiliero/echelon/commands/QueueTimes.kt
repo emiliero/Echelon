@@ -8,7 +8,7 @@ enum class QueueTimes(var timeString: String) {
     },
     Wednesday("Wednesday"){
         override fun toString(): String {
-            return "12:15"
+            return "11:15"
         }
     },
     Thursday("Thursday"){

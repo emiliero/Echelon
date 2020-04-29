@@ -1,6 +1,7 @@
 package com.github.emiliero.echelon.queue
 
 import com.github.emiliero.echelon.commands.QueueTimes
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -17,18 +18,13 @@ object DateTimeCheck {
         return result
     }
 
-    fun validateIfQueueTimeIsValid(): Boolean {
-        val current = LocalDateTime.now()
-
-        return checkIfCorrectDay(current)
-    }
-
-    private fun checkIfCorrectDay(currentDay: LocalDateTime): Boolean {
-        val currentDayOfTheWeek = currentDay.dayOfWeek
+    fun checkIfDateIsOutsideOfQueueTime(): Boolean {
+        val currentDate = LocalDateTime.now()
+        val currentDayOfTheWeek = currentDate.dayOfWeek
 
         for (rehearsalDays in QueueTimes.values()) {
             if (rehearsalDays.timeString.toLowerCase() == currentDayOfTheWeek.toString().toLowerCase()) {
-                return checkIfTimeOfDayIsCorrect(currentDay.toLocalTime(), rehearsalDays.timeString)
+                return checkIfTimeOfDayIsCorrect(currentDate.toLocalTime(), rehearsalDays.timeString)
             }
         }
         return false
