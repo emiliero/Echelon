@@ -1,5 +1,6 @@
 package com.github.emiliero.echelon.commands
 
+import com.github.emiliero.echelon.model.values.Commands
 import discord4j.core.DiscordClient
 import discord4j.core.`object`.entity.Message
 import discord4j.core.`object`.entity.MessageChannel

@@ -1,4 +1,4 @@
-package com.github.emiliero.echelon.commands
+package com.github.emiliero.echelon.model.values
 
 enum class QueueTimes(var timeString: String) {
     Tuesday("Tuesday"){

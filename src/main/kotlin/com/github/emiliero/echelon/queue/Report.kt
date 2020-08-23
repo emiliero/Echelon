@@ -1,5 +1,6 @@
-package com.github.emiliero.echelon.model
+package com.github.emiliero.echelon.queue
 
+import com.github.emiliero.echelon.model.Student
 import java.time.LocalDate
 import java.time.LocalDateTime
 

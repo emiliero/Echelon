@@ -1,6 +1,7 @@
-package com.github.emiliero.echelon.authorization
+package com.github.emiliero.echelon.model.values
 
 enum class StudentAssistant(var studentAssistantUsername: String) {
+    //TODO: Change to a specific role instead of people (!makestudass command)
     LarsEmil("larseknu"){
         override fun toString(): String {
             return "8231"

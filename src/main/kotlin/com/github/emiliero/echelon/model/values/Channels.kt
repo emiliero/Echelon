@@ -1,4 +1,4 @@
-package com.github.emiliero.echelon.authorization
+package com.github.emiliero.echelon.model.values
 
 enum class Channels(val channelId:String) {
     COMMAND_TEST("688418280511242257"),

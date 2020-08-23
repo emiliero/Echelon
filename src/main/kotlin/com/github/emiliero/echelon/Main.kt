@@ -1,6 +1,7 @@
 package com.github.emiliero.echelon
 
 import com.github.emiliero.echelon.authorization.login
+import com.github.emiliero.echelon.model.values.Commands
 import com.github.emiliero.echelon.commands.printHelp
 import com.github.emiliero.echelon.commands.queueActions
 import discord4j.core.DiscordClient
@@ -10,7 +11,7 @@ import discord4j.core.`object`.presence.Presence
 
 fun main(args: Array<String>) {
     val client: DiscordClient = DiscordClientBuilder(BuildConfig.TOKEN_KEY)
-        .setInitialPresence(Presence.online(Activity.listening("!help")))
+        .setInitialPresence(Presence.online(Activity.listening(Commands.Help.commandString)))
         .build()
 
     login(client)

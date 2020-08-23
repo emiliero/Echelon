@@ -1,6 +1,6 @@
 package com.github.emiliero.echelon.queue
 
-import com.github.emiliero.echelon.commands.QueueTimes
+import com.github.emiliero.echelon.model.values.QueueTimes
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
