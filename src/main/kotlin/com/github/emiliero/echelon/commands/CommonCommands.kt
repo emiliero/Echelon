@@ -1,6 +1,7 @@
 package com.github.emiliero.echelon.commands
 
-import com.github.emiliero.echelon.model.values.Commands
+import com.github.emiliero.echelon.model.values.AdminCommands
+import com.github.emiliero.echelon.model.values.CommonCommands
 import com.github.emiliero.echelon.queue.ListActionsArray.addPersonToQueue
 import com.github.emiliero.echelon.queue.ListActionsArray.checkPositionInQueue
 import com.github.emiliero.echelon.queue.ListActionsArray.clearList
@@ -35,7 +36,7 @@ private fun joinQueue(client: DiscordClient) {
             message.author.map { user: User -> !user.isBot }.orElse(false)
         }
         .filter { message: Message ->
-            message.content.orElse("").equals(Commands.Join.commandString, ignoreCase = true)
+            message.content.orElse("").equals(CommonCommands.Join.commandString, ignoreCase = true)
         }.flatMap { m: Message ->
             username = m.author.get().username
             discriminator = m.author.get().discriminator
@@ -64,7 +65,7 @@ private fun leaveQueue(client: DiscordClient) {
             message.author.map { user: User -> !user.isBot }.orElse(false)
         }
         .filter { message: Message ->
-            message.content.orElse("").equals(Commands.Leave.commandString, ignoreCase = true)
+            message.content.orElse("").equals(CommonCommands.Leave.commandString, ignoreCase = true)
         }
         .flatMap { m : Message ->
             username = m.author.get().username
@@ -82,7 +83,7 @@ private fun printQueue(client: DiscordClient){
             message.author.map { user: User -> !user.isBot}.orElse(false)
         }
         .filter { message: Message ->
-            message.content.orElse("").equals(Commands.PrintQueue.commandString, ignoreCase = true)
+            message.content.orElse("").equals(CommonCommands.PrintQueue.commandString, ignoreCase = true)
         }.flatMap { m : Message -> m.channel }
         .flatMap<Message> { channel: MessageChannel -> channel.createMessage(printList()) }
         .subscribe()
@@ -99,7 +100,7 @@ private fun clearQueue(client : DiscordClient){
 
         }
         .filter { message: Message ->
-            message.content.orElse("").equals(Commands.Clear.commandString, ignoreCase = true)
+            message.content.orElse("").equals(AdminCommands.Clear.commandString, ignoreCase = true)
         }.flatMap {m:Message ->
             username = m.author.get().username
             discriminator = m.author.get().discriminator
@@ -119,7 +120,7 @@ private fun checkPosition(client : DiscordClient){
             message!!.author.map { user : User -> !user.isBot}.orElse(false)
         }
         .filter { message: Message ->
-            message.content.orElse("").equals(Commands.Position.commandString, ignoreCase = true)
+            message.content.orElse("").equals(CommonCommands.Position.commandString, ignoreCase = true)
         }.flatMap {m:Message ->
             username = m.author.get().username
             discriminator = m.author.get().discriminator
@@ -141,7 +142,7 @@ private fun addNextStudentInLineToChannel(client : DiscordClient){
             message!!.author.map { user: User -> !user.isBot }.orElse(false)
         }
         .filter{message: Message ->
-            message.content.orElse("").equals(Commands.Next.commandString, ignoreCase = true)
+            message.content.orElse("").equals(AdminCommands.Next.commandString, ignoreCase = true)
         }.flatMap { m:Message ->
             studassUsername = m.author.get().username
             studassDiscriminator = m.author.get().discriminator
@@ -162,7 +163,7 @@ private fun printReport(client : DiscordClient) {
             message!!.author.map { user: User -> !user.isBot }.orElse(false)
         }
         .filter{message: Message ->
-            message.content.orElse("").equals(Commands.Report.commandString, ignoreCase = true)
+            message.content.orElse("").equals(AdminCommands.Report.commandString, ignoreCase = true)
         }.flatMap { m:Message ->
 
             studassUsername = m.author.get().username
