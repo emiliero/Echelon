@@ -7,7 +7,7 @@
   </p>
 </div -->
 
-A Discord bot written in Kotlin which handles queues for rehearsals in the Programming 2 at Østfold University College amidst of the Covid-19 pandemic. 
+A Discord bot written in Kotlin which handles queues for rehearsals in the Programming 2 at Østfold University College amidst of the Covid-19 pandemic. Further developed to fit into several course's Discord servers to uniquely handle queueing. 
 
 ## Features
 
