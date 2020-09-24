@@ -151,7 +151,7 @@ object ListActionsArray : IListActions {
         val channelSnowFlake = createValidSnowFlake((channelId))
 
         return if(isUserAuthorizedForStudentAssistantCommands(username, discriminator)
-            && isUserAuthorizedForChannelCommand(channelSnowFlake)) {
+            /*&& isUserAuthorizedForChannelCommand(channelSnowFlake)*/) {
             report.toString()
         } else {
             "this command is restricted to another channel or user group"

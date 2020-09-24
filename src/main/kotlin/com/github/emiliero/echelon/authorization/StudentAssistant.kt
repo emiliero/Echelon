@@ -1,34 +1,29 @@
 package com.github.emiliero.echelon.authorization
 
 enum class StudentAssistant(var studentAssistantUsername: String) {
-    LarsEmil("larseknu"){
+    Mats("AdmiralAnanas"){
         override fun toString(): String {
             return "8231"
         }
     },
-    Anders("Anders"){
+    LarsErik("Lars-Erik"){
         override fun toString(): String {
-            return "7082"
+            return "6401"
         }
     },
     Emilie("Zoryi"){
         override fun toString(): String {
-            return "9995"
+            return "0001"
         }
     },
-    Jo("Joandreas"){
+    Soppen("Soppen"){
         override fun toString(): String {
-            return "9781"
+            return "1001"
         }
     },
-    Mette("Mette"){
+    DXCT("DXCT"){
         override fun toString(): String {
-            return "7398"
-        }
-    },
-    JornHe("Yearn"){
-        override fun toString(): String {
-            return "3599"
+            return "7504"
         }
     }
 }
