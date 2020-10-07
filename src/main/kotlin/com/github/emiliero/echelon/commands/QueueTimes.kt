@@ -3,10 +3,9 @@ package com.github.emiliero.echelon.commands
 enum class QueueTimes(var timeString: String) {
     Monday("Monday"){
         override fun toString(): String {
-<<<<<<< HEAD
-            return "12:15"
+            return "14:15"
         }
-    },
+    }/*,
     Wednesday("Wednesday"){
         override fun toString(): String {
             return "14:45"
@@ -21,5 +20,5 @@ enum class QueueTimes(var timeString: String) {
         override fun toString(): String {
             return "14:15"
         }
-    }
+    }*/
 }
