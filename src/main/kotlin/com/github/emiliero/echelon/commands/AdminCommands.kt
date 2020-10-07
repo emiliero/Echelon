@@ -1,18 +1,17 @@
 package com.github.emiliero.echelon.commands
 
-
 enum class AdminCommands(var commandString: String) {
-    Next("!next"){
+    Next("!next") {
         override fun toString(): String {
             return "Get the next student in queue"
         }
     },
-    Clear("!clear"){
+    Clear("!clear") {
         override fun toString(): String {
             return "Clear the entire list"
         }
     },
-    Report("!report"){
+    Report("!report") {
         override fun toString(): String {
             return "Print report for the day"
         }
