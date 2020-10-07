@@ -41,7 +41,7 @@ __Student assistants__
 
 `!clear` - Clear the entire list
 
-`!report` - Prints a report of rehearsal data for det given day
+`!report` - Prints a report of rehearsal data for the given day
 
 ## Future features
 
