@@ -11,9 +11,9 @@ enum class StudentAssistant(var studentAssistantUsername: String) {
             return "7082"
         }
     },
-    Emilie("Zoryi"){
+    Emilie("Emilie"){
         override fun toString(): String {
-            return "9995"
+            return "0001"
         }
     },
     Jo("Joandreas"){

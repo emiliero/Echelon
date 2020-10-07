@@ -101,7 +101,7 @@ object ListActionsArray : IListActions {
             val user: Student = studentList.removeAt(0)
             report.addHelpToReport(studentAssistantId, user)
             shiftList()
-            return "<@${user.snowflake}> is the next one up with <@${studentAssistantId}> <:pepeHack:687975058215403552>"
+            return "<@${user.snowflake}> is the next one up with <@${studentAssistantId}> <a:pepeHack:753229418498883624>"
         }
         return "<@${studentAssistantId}>, there are no students in queue"
     }
@@ -151,7 +151,7 @@ object ListActionsArray : IListActions {
         val channelSnowFlake = createValidSnowFlake((channelId))
 
         return if(isUserAuthorizedForStudentAssistantCommands(username, discriminator)
-            && isUserAuthorizedForChannelCommand(channelSnowFlake)) {
+            /*&& isUserAuthorizedForChannelCommand(channelSnowFlake)*/) {
             report.toString()
         } else {
             "this command is restricted to another channel or user group"
