@@ -1,6 +1,5 @@
 package com.github.emiliero.echelon.queue
 
-import com.github.emiliero.echelon.authorization.isUserAuthorizedForChannelCommand
 import com.github.emiliero.echelon.authorization.isUserAuthorizedForStudentAssistantCommands
 import com.github.emiliero.echelon.model.Report
 import com.github.emiliero.echelon.model.Student
@@ -23,14 +22,14 @@ object ListActionsArray : IListActions {
             if(studentList.any()){
                 studentList.add(studentList.lastIndex+1, p)
                 report.addQueuedStudentToReport()
-                "<@${p.snowflake}>"+" has been added to the queue you are at spot ${p.placeInQue}"
+                "<@${p.snowflake}> has been added to the queue you are at spot ${p.placeInQue}"
             } else {
                 studentList.add(p)
                 report.addQueuedStudentToReport()
-                "<@${p.snowflake}>"+ " has been added to the queue, you are the first one up at place ${p.placeInQue}"
+                "<@${p.snowflake}> has been added to the queue, you are the first one up at place ${p.placeInQue}"
             }
         } else {
-            "<@${p.snowflake}>"+" is already in the queue, you can't join twice <:pepega:687979040019054803>"
+            "<@${p.snowflake}> is already in the queue, you can't join twice <:pepega:687979040019054803>"
         }
     }
 
@@ -66,9 +65,7 @@ object ListActionsArray : IListActions {
     }
 
     override fun clearList(username: String, discriminator: String): String {
-        var result = ""
-        //TODO: Hvis lista alt er tom, ikke clear
-        result = if (isUserAuthorizedForStudentAssistantCommands(username, discriminator)) {
+        return if (isUserAuthorizedForStudentAssistantCommands(username, discriminator)) {
             if (studentList.isNotEmpty()) {
                 studentList.clear()
                 "Queue is cleared"
@@ -78,8 +75,6 @@ object ListActionsArray : IListActions {
         } else {
             "You are not authorized for this command"
         }
-
-        return result
     }
 
     private fun isStudentInQueue(username: String, discriminator: String) : Boolean {
@@ -97,13 +92,16 @@ object ListActionsArray : IListActions {
     fun moveNextStudentIntoChannel(username: String, discriminator: String, id : String): String {
         val studentAssistantId = createValidSnowFlake(id)
 
-        if(!studentList.isNullOrEmpty() && isUserAuthorizedForStudentAssistantCommands(username, discriminator)) {
+        return if(isUserAuthorizedForStudentAssistantCommands(username, discriminator)) {
             val user: Student = studentList.removeAt(0)
             report.addHelpToReport(studentAssistantId, user)
             shiftList()
             return "<@${user.snowflake}> is the next one up with <@${studentAssistantId}> <a:pepeHack:753229418498883624>"
+        } else if (!studentList.isNullOrEmpty()) {
+            "<@${studentAssistantId}> - you are not authorized for this command."
+        } else {
+            "<@${studentAssistantId}>, there are no students in queue."
         }
-        return "<@${studentAssistantId}>, there are no students in queue"
     }
 
     fun checkPositionInQueue(username: String, discriminator: String, snowflake: String) : String {
@@ -147,19 +145,15 @@ object ListActionsArray : IListActions {
         return builder.toString()
     }
 
-    fun reportSummary(channelId : String,username : String, discriminator : String): String {
-        val channelSnowFlake = createValidSnowFlake((channelId))
-
-        return if(isUserAuthorizedForStudentAssistantCommands(username, discriminator)
-            /*&& isUserAuthorizedForChannelCommand(channelSnowFlake)*/) {
+    fun reportSummary(username : String, discriminator : String): String {
+        return if(isUserAuthorizedForStudentAssistantCommands(username, discriminator)) {
             report.toString()
         } else {
-            "this command is restricted to another channel or user group"
+            "This command is restricted to another channel or user group"
         }
     }
 
     fun createValidSnowFlake(id : String) : String {
         return id.split("{", "}")[1]
     }
-
 }

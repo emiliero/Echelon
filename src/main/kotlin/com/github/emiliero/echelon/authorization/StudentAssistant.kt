@@ -11,7 +11,7 @@ enum class StudentAssistant(var studentAssistantUsername: String) {
             return "6401"
         }
     },
-    Emilie("Emilie"){
+    Emilie("Zoryi"){
         override fun toString(): String {
             return "0001"
         }

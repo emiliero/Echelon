@@ -1,6 +1,7 @@
 package com.github.emiliero.echelon
 
 import com.github.emiliero.BuildConfig
+import com.github.emiliero.echelon.BuildConfig.TOKEN_KEY
 import com.github.emiliero.echelon.authorization.login
 import com.github.emiliero.echelon.commands.CommonCommands
 import com.github.emiliero.echelon.commands.printHelp

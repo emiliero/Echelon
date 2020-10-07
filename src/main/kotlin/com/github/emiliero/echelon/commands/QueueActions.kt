@@ -146,7 +146,7 @@ private fun addNextStudentInLineToChannel(client : DiscordClient){
         }.flatMap { m:Message ->
             studassUsername = m.author.get().username
             studassDiscriminator = m.author.get().discriminator
-            id = m.author.get().id.toString() //Snowflake
+            id = m.author.get().id.toString()
             m.channel
         }
         .flatMap { channel: MessageChannel -> channel.createMessage(moveNextStudentIntoChannel(studassUsername, studassDiscriminator, id))}
@@ -170,7 +170,7 @@ private fun printReport(client : DiscordClient) {
             studassDiscriminator = m.author.get().discriminator
             m.channel
         }
-        .flatMap { channel: MessageChannel -> channel.createMessage(reportSummary(channel.id.toString(),studassUsername, studassDiscriminator))}
+        .flatMap { channel: MessageChannel -> channel.createMessage(reportSummary(studassUsername, studassDiscriminator))}
         .subscribe()
 }
 
